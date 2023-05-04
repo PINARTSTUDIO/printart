@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Order Form</title>
+</head>
+<body>
+	<h1>Order Form</h1>
+	<form action="submit.php" method="post">
+		<label for="width">Width (in feet):</label>
+		<input type="number" id="width" name="width" required><br>
+
+		<label for="height">Height (in feet):</label>
+		<input type="number" id="height" name="height" required><br>
+
+		<label for="sqft">Square Feet:</label>
+		<input type="number" id="sqft" name="sqft" readonly><br>
+
+		<label for="category">Category:</label>
+		<select id="category" name="category" required>
+			<option value="">--Please select--</option>
+			<option value="Normal">Normal</option>
+			<option value="Star">Star</option>
+			<option value="Backlight">Backlight</option>
+			<option value="One Way Vision">One Way Vision</option>
+			<option value="Vinyl">Vinyl</option>
+		</select><br>
+
+		<label for="rate">Rate (per square feet):</label>
+		<input type="number" id="rate" name="rate" required><br>
+
+		<label for="design_cost">Designing Cost:</label>
+		<input type="number" id="design_cost" name="design_cost" required><br>
+
+		<label for="delivery">Delivery:</label><br>
+		<input type="radio" id="normal_delivery" name="delivery" value="Normal" checked>
+		<label for="normal_delivery">Normal</label><br>
+		<input type="radio" id="urgent_delivery" name="delivery" value="Urgent">
+		<label for="urgent_delivery">Urgent</label><br>
+
+		<label for="total_price">Total Price:</label>
+		<input type="number" id="total_price" name="total_price" readonly><br>
+
+		<label for="description">Describe your Product/Design:</label><br>
+		<textarea id="description" name="description" rows="5" cols="30"></textarea><br>
+
+		<input type="submit" value="Order">
+	</form>
+</body>
+<script>
+	function calculateTotalPrice() {
+		var width = document.getElementById("width").value;
+		var height = document.getElementById("height").value;
+		var sqft = width * height;
+		var rate = document.getElementById("rate").value;
+		var delivery = document.querySelector('input[name="delivery"]:checked').value;
+		var design_cost = document.getElementById("design_cost").value;
+		var total_price;
+
+		if (delivery == "Normal") {
+			total_price = sqft * rate + parseInt(design_cost);
+		} else {
+			total_price = sqft * rate + parseInt(design_cost) + 50; // adding extra delivery cost for urgent delivery
+		}
+
+		document.getElementById("sqft").value = sqft;
+		document.getElementById("total_price").value = total_price;
+	}
+
+	document.getElementById("width").addEventListener("input", calculateTotalPrice);
+	document.getElementById("height").addEventListener("input", calculateTotalPrice);
+	document.getElementById("category").addEventListener("change", calculateTotalPrice);
+	document.getElementById("rate").addEventListener("input", calculateTotalPrice);
+	document.getElementById("design_cost").addEventListener("input", calculateTotalPrice);
+	document.querySelector('input[name="delivery"]').addEventListener("change", calculateTotalPrice);
+</script>
+</
